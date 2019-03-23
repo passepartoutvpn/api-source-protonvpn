@@ -1,0 +1,5 @@
+Configurations are publicly accessible from:
+
+https://account.protonvpn.com/api/vpn/config?APIVersion=3&Category=Server&Platform=iOS&Protocol=udp&Tier=2
+
+Tiers are 0 (free), 1 (plus) and 2 (visionary). 0 and 1 are incremental subsets of 2.
