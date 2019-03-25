@@ -75,7 +75,8 @@ recommended = {
             }
         },
         frame: 1,
-        reneg: 0
+        reneg: 0,
+        eku: true
     }
 }
 presets = [recommended]
