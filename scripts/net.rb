@@ -7,26 +7,33 @@ Dir.chdir(cwd)
 
 ###
 
-def read_static_key(file, from, to)
+def read_tls_wrap(strategy, dir, file, from, to)
     lines = File.foreach(file)
     key = ""
     lines.with_index { |line, n|
         next if n < from or n >= to
         key << line.strip
     }
-    return [[key].pack("H*")].pack("m0")
+    key64 = [[key].pack("H*")].pack("m0")
+
+    return {
+        strategy: strategy,
+        key: {
+            dir: dir,
+            data: key64
+        }
+    }
 end
 
 ###
 
 servers = File.foreach("../template/servers.csv")
 ca = File.read("../template/ca.crt")
-tls_key = read_static_key("../template/ta.key", 2, 18)
-tls_strategy = "auth"
-tls_dir = 1
+tls_wrap = read_tls_wrap("auth", 1, "../template/ta.key", 2, 18)
 
 cfg = {
     ca: ca,
+    wrap: tls_wrap,
     ep: [
         "UDP:80",
         "UDP:443",
@@ -40,13 +47,6 @@ cfg = {
     ],
     cipher: "AES-256-CBC",
     auth: "SHA512",
-    wrap: {
-        strategy: tls_strategy,
-        key: {
-            data: tls_key,
-            dir: tls_dir
-        }
-    },
     frame: 1,
     reneg: 0,
     eku: true
