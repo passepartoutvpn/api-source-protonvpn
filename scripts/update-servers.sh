@@ -19,7 +19,7 @@ ID_REGEX="([a-z]+)(-free)?(-[a-z]+)?-([0-9]+)"
 # TODO: parse Tor support?
 
 mkdir -p $TPL
-#curl -L $URL >$SERVERS_SRC
+curl -L $URL >$SERVERS_SRC
 rm -rf $TMP
 unzip $SERVERS_SRC -d $TMP
 
