@@ -5,19 +5,66 @@ require "ipaddr"
 cwd = File.dirname(__FILE__)
 Dir.chdir(cwd)
 
+###
+
+def read_static_key(file, from, to)
+    lines = File.foreach(file)
+    key = ""
+    lines.with_index { |line, n|
+        next if n < from or n >= to
+        key << line.strip
+    }
+    return [[key].pack("H*")].pack("m0")
+end
+
+###
+
 servers = File.foreach("../template/servers.csv")
+ca = File.read("../template/ca.crt")
+tls_key = read_static_key("../template/ta.key", 2, 18)
+tls_strategy = "auth"
+tls_dir = 1
 
-ca = File.read("../certs/ca.crt")
-tlsStrategy = "auth" # tls-auth
-tlsKeyLines = File.foreach("../certs/ta.key")
-tlsDirection = 1
-
-tlsKey = ""
-tlsKeyLines.with_index { |line, n|
-    next if n < 2 or n >= 18
-    tlsKey << line.strip
+cfg = {
+    ca: ca,
+    ep: [
+        "UDP:80",
+        "UDP:443",
+        "UDP:4569",
+        "UDP:1194",
+        "UDP:5060",
+        "TCP:443",
+        "TCP:3389",
+        "TCP:8080",
+        "TCP:8443"
+    ],
+    cipher: "AES-256-CBC",
+    auth: "SHA512",
+    wrap: {
+        strategy: tls_strategy,
+        key: {
+            data: tls_key,
+            dir: tls_dir
+        }
+    },
+    frame: 1,
+    reneg: 0,
+    eku: true
 }
-tlsKey = [[tlsKey].pack("H*")].pack("m0")
+
+recommended = {
+    id: "default",
+    name: "Default",
+    comment: "256-bit encryption",
+    cfg: cfg
+}
+presets = [recommended]
+
+defaults = {
+    :username => "ABCdefGH012_jklMNop34Q_R",
+    :pool => "us-free-01",
+    :preset => "default"
+}
 
 ###
 
@@ -46,45 +93,6 @@ servers.with_index { |line, n|
     pool[:hostname] = hostname
     pool[:addrs] = addresses
     pools << pool
-}
-
-recommended = {
-    id: "recommended",
-    name: "Recommended",
-    comment: "256-bit encryption",
-    cfg: {
-        ep: [
-            "UDP:80",
-            "UDP:443",
-            "UDP:4569",
-            "UDP:1194",
-            "UDP:5060",
-            "TCP:443",
-            "TCP:3389",
-            "TCP:8080",
-            "TCP:8443"
-        ],
-        cipher: "AES-256-CBC",
-        auth: "SHA512",
-        ca: ca,
-        wrap: {
-            strategy: tlsStrategy,
-            key: {
-                data: tlsKey,
-                dir: tlsDirection
-            }
-        },
-        frame: 1,
-        reneg: 0,
-        eku: true
-    }
-}
-presets = [recommended]
-
-defaults = {
-    :username => "ABCdefGH012_jklMNop34Q_R",
-    :pool => "us-free-01",
-    :preset => "recommended"
 }
 
 ###

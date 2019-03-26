@@ -1,9 +1,13 @@
 #!/bin/bash
 URL="https://account.protonvpn.com/api/vpn/config?APIVersion=3&Category=Server&Platform=iOS&Protocol=udp&Tier=2"
-SAMPLE_CFG="tmp/at-01.protonvpn.com.udp.ovpn"
-CA="certs/ca.crt"
-TLS_KEY="certs/ta.key"
-SERVERS="template/servers.csv"
+TPL="template"
+TMP="tmp"
+SERVERS_SRC="$TPL/servers.zip"
+SERVERS_DST="$TPL/servers.csv"
+SAMPLE_CFG="$TMP/at-01.protonvpn.com.udp.ovpn"
+CA="$TPL/ca.crt"
+TLS_KEY="$TPL/ta.key"
+
 LINES=100000
 CA_BEGIN="<ca>"
 CA_END="</ca>"
@@ -14,17 +18,16 @@ ID_REGEX="([a-z]+)(-free)?(-[a-z]+)?-([0-9]+)"
 
 # TODO: parse Tor support?
 
-mkdir -p template
-curl -L $URL >template/src.zip
-rm -rf tmp
-unzip template/src.zip -d tmp
+mkdir -p $TPL
+#curl -L $URL >$SERVERS_SRC
+rm -rf $TMP
+unzip $SERVERS_SRC -d $TMP
 
-mkdir -p certs
 grep -A$LINES $CA_BEGIN $SAMPLE_CFG | grep -B$LINES $CA_END | egrep -v "$CA_BEGIN|$CA_END" >$CA
 grep -A$LINES $TLS_BEGIN $SAMPLE_CFG | grep -B$LINES $TLS_END | egrep -v "$TLS_BEGIN|$TLS_END" >$TLS_KEY
 
-rm -f $SERVERS
-for CFG in `cd tmp && ls *.ovpn`; do
+rm -f $SERVERS_DST
+for CFG in `cd $TMP && ls *.ovpn`; do
     #fr-09.protonvpn.com.udp.ovpn
     HOST=`echo $CFG | sed -E "s/(.+)\.udp\.ovpn$/\1/"`
     HOST_COMPS=(${HOST//./ })
@@ -34,6 +37,6 @@ for CFG in `cd tmp && ls *.ovpn`; do
         [ "${BASH_REMATCH[2]}" = "-free" ] && FREE=1 || FREE=0
         AREA=${BASH_REMATCH[3]:1}
         SERVER_NUM=${BASH_REMATCH[4]}
-        echo $ID,$COUNTRY,$AREA,$SERVER_NUM,$FREE,$HOST >>$SERVERS
+        echo $ID,$COUNTRY,$AREA,$SERVER_NUM,$FREE,$HOST >>$SERVERS_DST
     fi
 done
