@@ -49,7 +49,8 @@ cfg = {
     auth: "SHA512",
     frame: 1,
     reneg: 0,
-    eku: true
+    eku: true,
+    random: true
 }
 
 recommended = {
