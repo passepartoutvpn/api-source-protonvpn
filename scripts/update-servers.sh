@@ -40,3 +40,4 @@ for CFG in `cd $TMP && ls *.ovpn`; do
         echo $ID,$COUNTRY,$AREA,$SERVER_NUM,$FREE,$HOST >>$SERVERS_DST
     fi
 done
+sed -i"" -E "s/,uk,/,gb,/g" $SERVERS_DST
