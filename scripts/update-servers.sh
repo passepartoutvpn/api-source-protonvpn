@@ -37,12 +37,16 @@ for CFG in `cd $TMP && ls *.ovpn`; do
     HOST=`echo $CFG | sed -E "s/(.+)\.udp\.ovpn$/\1/"`
     HOST_COMPS=(${HOST//./ })
     ID=${HOST_COMPS[0]}
+    ADDRS_LIST=(`grep -E "remote ([0-9\.]+)" $TMP/$CFG | sed -E "s/^.*remote (([0-9]+\.){3}[0-9]+).*$/\1/g" | uniq`)
+    ADDRS=$(printf ":%s" "${ADDRS_LIST[@]}")
+    ADDRS=${ADDRS:1}
+
     if [[ $ID =~ $ID_REGEX ]]; then
         COUNTRY=${BASH_REMATCH[1]}
         [ "${BASH_REMATCH[2]}" = "-free" ] && FREE=1 || FREE=0
         AREA=${BASH_REMATCH[3]:1}
         SERVER_NUM=${BASH_REMATCH[4]}
-        echo $ID,$COUNTRY,$AREA,$SERVER_NUM,$FREE,$HOST >>$SERVERS_DST
+        echo $ID,$COUNTRY,$AREA,$SERVER_NUM,$FREE,$HOST,$ADDRS >>$SERVERS_DST
     fi
 done
 sed -i"" -E "s/,uk,/,gb,/g" $SERVERS_DST
