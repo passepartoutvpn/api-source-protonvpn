@@ -1,5 +1,7 @@
 #!/bin/bash
-URL="https://account.protonvpn.com/api/vpn/config?APIVersion=3&Category=Server&Platform=iOS&Protocol=udp&Tier=2"
+URL="https://account.protonvpn.com/api/vpn/config?APIVersion=3&Platform=iOS&Protocol=udp&Tier=2"
+URL_PREMIUM="${URL}&Category=Server"
+URL_SECURECORE="${URL}&Category=SecureCore"
 TPL="template"
 TMP="tmp"
 SERVERS_SRC="$TPL/servers.zip"
@@ -16,12 +18,15 @@ TLS_END="</tls-auth>"
 ID_REGEX="([a-z]+)(-free)?(-[a-z]+)?-([0-9]+)"
 #ID_REGEX="([a-z]+)(-[a-z]+)?-([0-9]+)"
 
-# TODO: parse Tor support?
+# TODO: parse Tor support, grep "tor" in filename
 
 mkdir -p $TPL
-curl -L $URL >$SERVERS_SRC
 rm -rf $TMP
-unzip $SERVERS_SRC -d $TMP
+mkdir $TMP
+curl -L $URL_PREMIUM >$SERVERS_SRC.p
+curl -L $URL_SECURECORE >$SERVERS_SRC.sc
+unzip $SERVERS_SRC.p -d $TMP
+unzip $SERVERS_SRC.sc -d $TMP
 
 grep -A$LINES $CA_BEGIN $SAMPLE_CFG | grep -B$LINES $CA_END | egrep -v "$CA_BEGIN|$CA_END" >$CA
 grep -A$LINES $TLS_BEGIN $SAMPLE_CFG | grep -B$LINES $TLS_END | egrep -v "$TLS_BEGIN|$TLS_END" >$TLS_KEY
