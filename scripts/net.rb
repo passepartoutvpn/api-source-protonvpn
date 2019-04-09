@@ -71,17 +71,23 @@ defaults = {
 
 pools = []
 servers.with_index { |line, n|
-    id, country, area, num, free, hostname = line.strip.split(",")
+    id, country, area, num, free, hostname, resolved_joined = line.strip.split(",")
 
     addresses = nil
-    if ARGV.length > 0 && ARGV[0] == "noresolv"
-        addresses = []
+    if resolved_joined.nil?
+        if ARGV.length > 0 && ARGV[0] == "noresolv"
+            addresses = []
+        else
+            addresses = Resolv.getaddresses(hostname)
+        end
+        addresses.map! { |a|
+            IPAddr.new(a).to_i
+        }
     else
-        addresses = Resolv.getaddresses(hostname)
+        addresses = resolved_joined.split(":").map { |a|
+            IPAddr.new(a).to_i
+        }
     end
-    addresses.map! { |a|
-        IPAddr.new(a).to_i
-    }
 
     pool = {
         :id => id,
@@ -91,7 +97,7 @@ servers.with_index { |line, n|
     pool[:area] = area if !area.empty?
     pool[:num] = num
     pool[:free] = (free == "1")
-    pool[:hostname] = hostname
+    pool[:hostname] = hostname if !hostname.empty?
     pool[:addrs] = addresses
     pools << pool
 }
