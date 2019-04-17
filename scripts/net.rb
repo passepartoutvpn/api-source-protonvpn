@@ -91,7 +91,6 @@ servers.with_index { |line, n|
 
     pool = {
         :id => id,
-        :name => "",
         :country => country.upcase
     }
     pool[:area] = area if !area.empty?
