@@ -33,7 +33,9 @@ for I in ${!PLANS[@]}; do
     PLAN=${PLANS[$I]}
     SUB="$TMP/$PLAN"
 
-    curl -L $URL >$SERVERS_SRC.$PLAN
+    if ! curl -L $URL >$SERVERS_SRC.$PLAN; then
+        exit
+    fi
     unzip $SERVERS_SRC.$PLAN -d $TMP/$PLAN
 
     for CFG in `cd $SUB && ls *.ovpn`; do
