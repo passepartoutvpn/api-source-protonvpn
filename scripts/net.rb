@@ -93,9 +93,11 @@ servers.with_index { |line, n|
         :id => id,
         :country => country.upcase
     }
+    if free == "1"
+        pool[:category] = "free"
+    end
     pool[:area] = area if !area.empty?
     pool[:num] = num
-    pool[:free] = (free == "1")
     pool[:hostname] = hostname if !hostname.empty?
     pool[:addrs] = addresses
     pools << pool
