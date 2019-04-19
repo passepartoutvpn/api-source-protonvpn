@@ -64,7 +64,8 @@ presets = [recommended]
 defaults = {
     :username => "ABCdefGH012_jklMNop34Q_R",
     :pool => "us-free-01",
-    :preset => "default"
+    :preset => "default",
+    :numpad => 1
 }
 
 ###
@@ -98,7 +99,6 @@ servers.with_index { |line, n|
     end
     pool[:area] = area if !area.empty?
     pool[:num] = num.to_i
-    pool[:numpad] = 1
     pool[:hostname] = hostname if !hostname.empty?
     pool[:addrs] = addresses
     pools << pool
