@@ -38,10 +38,6 @@ for I in ${!PLANS[@]}; do
     fi
     unzip $SERVERS_SRC.$PLAN -d $TMP/$PLAN
 
-    if [[ $PLAN = "sc" ]]; then
-        CATEGORY="secure core"
-    fi
-
     for CFG in `cd $SUB && ls *.ovpn`; do
         #fr-09.protonvpn.com.udp.ovpn
         HOST=`echo $CFG | sed -E "s/(.+)\.udp\.ovpn$/\1/"`
@@ -53,7 +49,12 @@ for I in ${!PLANS[@]}; do
 
         if [[ $ID =~ $ID_REGEX ]]; then
             COUNTRY=${BASH_REMATCH[1]}
-            [ "${BASH_REMATCH[2]}" = "-free" ] && CATEGORY="free"
+            if [[ $PLAN = "sc" ]]; then
+                CATEGORY="secure core"
+            else
+                CATEGORY=""
+                [ "${BASH_REMATCH[2]}" = "-free" ] && CATEGORY="free"
+            fi
             AREA=${BASH_REMATCH[3]:1}
             SERVER_NUM=${BASH_REMATCH[4]}
 
