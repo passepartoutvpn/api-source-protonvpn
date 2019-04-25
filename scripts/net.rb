@@ -72,7 +72,7 @@ defaults = {
 
 pools = []
 servers.with_index { |line, n|
-    id, country, area, num, free, hostname, resolved_joined = line.strip.split(",")
+    id, country, area, num, category, hostname, resolved_joined = line.strip.split(",")
 
     addresses = nil
     if resolved_joined.nil?
@@ -94,9 +94,7 @@ servers.with_index { |line, n|
         :id => id,
         :country => country.upcase
     }
-    if free == "1"
-        pool[:category] = "free"
-    end
+    pool[:category] = category if !category.empty?
     pool[:area] = area if !area.empty?
     pool[:num] = num.to_i
     pool[:hostname] = hostname if !hostname.empty?
