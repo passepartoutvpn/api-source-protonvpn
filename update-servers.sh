@@ -49,19 +49,20 @@ for I in ${!PLANS[@]}; do
 
         if [[ $ID =~ $ID_REGEX ]]; then
             COUNTRY=${BASH_REMATCH[1]}
-            if [[ $PLAN = "sc" ]]; then
-                CATEGORY="secure core"
-            else
-                CATEGORY=""
-                [ "${BASH_REMATCH[2]}" = "-free" ] && CATEGORY="free"
-            fi
             AREA=${BASH_REMATCH[3]:1}
             SERVER_NUM=${BASH_REMATCH[4]}
 
             if [[ $PLAN = "sc" ]]; then
+                CATEGORY="secure core"
                 HOST=""
+                EXTRA_COUNTRY=$AREA
+                AREA=""
+            else
+                CATEGORY=""
+                [ "${BASH_REMATCH[2]}" = "-free" ] && CATEGORY="free"
             fi
-            echo $ID,$COUNTRY,$AREA,$SERVER_NUM,$CATEGORY,$HOST,$ADDRS >>$SERVERS_DST
+
+            echo $ID,$COUNTRY,$EXTRA_COUNTRY,$AREA,$SERVER_NUM,$CATEGORY,$HOST,$ADDRS >>$SERVERS_DST
         fi
     done
 done

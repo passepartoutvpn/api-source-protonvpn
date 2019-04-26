@@ -77,7 +77,7 @@ defaults = {
 
 pools = []
 servers.with_index { |line, n|
-    id, country, area, num, category, hostname, resolved_joined = line.strip.split(",")
+    id, country, extraCountry, area, num, category, hostname, resolved_joined = line.strip.split(",")
 
     addresses = nil
     if resolved_joined.nil?
@@ -100,6 +100,7 @@ servers.with_index { |line, n|
         :country => country.upcase
     }
     pool[:category] = category if !category.empty?
+    pool[:extra_countries] = [extraCountry.upcase] if !extraCountry.empty?
     pool[:area] = area if !area.empty?
     pool[:num] = num.to_i
     if hostname.empty?
