@@ -69,8 +69,7 @@ presets = [recommended]
 defaults = {
     :username => "ABCdefGH012_jklMNop34Q_R",
     :pool => "us-free-01",
-    :preset => "default",
-    :numpad => 1
+    :preset => "default"
 }
 
 ###
