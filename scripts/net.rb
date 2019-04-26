@@ -53,11 +53,16 @@ cfg = {
     random: true
 }
 
+external = {
+    hostname: "${id}.protonvpn.com"
+}
+
 recommended = {
     id: "default",
     name: "Default",
     comment: "256-bit encryption",
-    cfg: cfg
+    cfg: cfg,
+    external: external
 }
 presets = [recommended]
 
@@ -97,7 +102,11 @@ servers.with_index { |line, n|
     pool[:category] = category if !category.empty?
     pool[:area] = area if !area.empty?
     pool[:num] = num.to_i
-    pool[:hostname] = hostname if !hostname.empty?
+    if hostname.empty?
+        pool[:resolved] = true
+    else
+        pool[:hostname] = hostname
+    end
     pool[:addrs] = addresses
     pools << pool
 }
