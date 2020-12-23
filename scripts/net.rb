@@ -61,6 +61,9 @@ servers.with_index { |line, n|
 
     addresses = nil
     if resolved_joined.nil?
+        if hostname.nil?
+            next
+        end
         if ARGV.include? "noresolv"
             addresses = []
         else
