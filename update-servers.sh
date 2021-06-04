@@ -36,7 +36,7 @@ for I in ${!PLANS[@]}; do
     if ! curl -L $URL >$SERVERS_SRC.$PLAN; then
         exit
     fi
-    unzip $SERVERS_SRC.$PLAN -d $TMP/$PLAN
+    unzip -o $SERVERS_SRC.$PLAN -d $TMP/$PLAN
 
     for CFG in `cd $SUB && ls *.ovpn`; do
         #fr-09.protonvpn.com.udp.ovpn
