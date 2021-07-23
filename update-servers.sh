@@ -9,7 +9,7 @@ TPL="template"
 TMP="tmp"
 SERVERS_SRC="$TPL/servers.zip"
 SERVERS_DST="$TPL/servers.csv"
-SAMPLE_CFG="$TMP/p/at-01.protonvpn.com.udp.ovpn"
+SAMPLE_CFG="$TMP/p/at-01.protonvpn.net.udp.ovpn"
 CA="$TPL/ca.crt"
 TLS_KEY="$TPL/ta.key"
 
