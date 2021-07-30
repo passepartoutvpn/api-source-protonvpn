@@ -18,7 +18,7 @@ CA_BEGIN="<ca>"
 CA_END="</ca>"
 TLS_BEGIN="<tls-auth>"
 TLS_END="</tls-auth>"
-ID_REGEX="(node-)?([a-z]+)(-free)?(-[a-z]+)?-([0-9]+)"
+ID_REGEX="(node|lxc)?-?([a-z]+)(-free)?(-[a-z]+)?-([0-9]+)"
 #ID_REGEX="([a-z]+)(-[a-z]+)?-([0-9]+)"
 
 # TODO: parse Tor support, grep "tor" in filename
