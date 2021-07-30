@@ -1,4 +1,4 @@
-def read_tls_wrap(strategy, dir, file, from = 0, count = 16)
+def read_tls_wrap(strategy, dir, file, from = 1, count = 16)
     lines = File.foreach(file)
     to = from + count
     key = ""

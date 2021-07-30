@@ -18,7 +18,7 @@ CA_BEGIN="<ca>"
 CA_END="</ca>"
 TLS_BEGIN="<tls-auth>"
 TLS_END="</tls-auth>"
-ID_REGEX="([a-z]+)(-free)?(-[a-z]+)?-([0-9]+)"
+ID_REGEX="(node-)?([a-z]+)(-free)?(-[a-z]+)?-([0-9]+)"
 #ID_REGEX="([a-z]+)(-[a-z]+)?-([0-9]+)"
 
 # TODO: parse Tor support, grep "tor" in filename
@@ -48,9 +48,9 @@ for I in ${!PLANS[@]}; do
         ADDRS=${ADDRS:1}
 
         if [[ $ID =~ $ID_REGEX ]]; then
-            COUNTRY=${BASH_REMATCH[1]}
-            AREA=${BASH_REMATCH[3]:1}
-            SERVER_NUM=${BASH_REMATCH[4]}
+            COUNTRY=${BASH_REMATCH[2]}
+            AREA=${BASH_REMATCH[4]:1}
+            SERVER_NUM=${BASH_REMATCH[5]}
 
             if [[ $PLAN = "sc" ]]; then
                 CATEGORY="secure core"
@@ -59,7 +59,7 @@ for I in ${!PLANS[@]}; do
                 AREA=""
             else
                 CATEGORY=""
-                [ "${BASH_REMATCH[2]}" = "-free" ] && CATEGORY="free"
+                [ "${BASH_REMATCH[3]}" = "-free" ] && CATEGORY="free"
             fi
 
             echo $ID,$COUNTRY,$EXTRA_COUNTRY,$AREA,$SERVER_NUM,$CATEGORY,$HOST,$ADDRS >>$SERVERS_DST
