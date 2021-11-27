@@ -49,7 +49,7 @@ presets = [recommended]
 
 defaults = {
   :username => "ABCdefGH012_jklMNop34Q_R",
-  :pool => "us-free-01",
+  :pool => "US-FREE",
   :preset => "default"
 }
 
