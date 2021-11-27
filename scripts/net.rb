@@ -77,8 +77,13 @@ json["LogicalServers"].each { |server|
     s["EntryIP"]
   }
 
+  if country == "UK"
+    country = "GB"
+  end
   if extraCountry == country
     extraCountry = nil
+  elsif extraCountry == "UK"
+    extraCountry = "GB"
   end
 
   if server["Features"].to_i & 1 == 1
