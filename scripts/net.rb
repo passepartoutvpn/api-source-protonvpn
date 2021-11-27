@@ -34,16 +34,11 @@ cfg = {
   random: true
 }
 
-external = {
-  hostname: "${id}.protonvpn.com"
-}
-
 recommended = {
   id: "default",
   name: "Default",
   comment: "256-bit encryption",
-  cfg: cfg,
-  external: external
+  cfg: cfg
 }
 presets = [recommended]
 
