@@ -77,6 +77,10 @@ json["LogicalServers"].each { |server|
     s["EntryIP"]
   }
 
+  if extraCountry == country
+    extraCountry = nil
+  end
+
   if server["Features"].to_i & 1 == 1
     category = "Secure Core"
   else
