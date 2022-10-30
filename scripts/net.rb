@@ -57,8 +57,8 @@ json["LogicalServers"].each { |server|
 
   #id = server["ID"]
   id = name
-  country = server["EntryCountry"]
-  extraCountry = server["ExitCountry"]
+  country = server["ExitCountry"]
+  extraCountry = server["EntryCountry"]
   area = server["City"] || server["Region"]
   if name_comps.size > 1
     num = name_comps[1].to_i
