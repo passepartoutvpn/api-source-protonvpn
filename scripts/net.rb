@@ -10,11 +10,11 @@ load "util.rb"
 
 template = File.read("../template/servers.json")
 ca = File.read("../static/ca.crt")
-tls_wrap = read_tls_wrap("auth", 1, "../static/ta.key", 2)
+tls_auth = read_tls_wrap("auth", 1, "../static/ta.key", 2)
+tls_crypt = read_tls_wrap("crypt", 1, "../static/ta.key", 2)
 
 cfg = {
   ca: ca,
-  tlsWrap: tls_wrap,
   cipher: "AES-256-CBC",
   digest: "SHA512",
   compressionFraming: 1,
@@ -23,27 +23,49 @@ cfg = {
   randomizeEndpoint: true
 }
 
-recommended = {
-  id: "default",
-  name: "Default",
-  comment: "256-bit encryption",
+endpoints = [
+  "UDP:80",
+  "UDP:443",
+  "UDP:1194",
+  "UDP:4569",
+  "UDP:5060",
+  "TCP:80",
+  "TCP:443",
+  "TCP:1194",
+  "TCP:4569",
+  "TCP:5060"
+]
+
+auth_cfg = cfg.dup
+auth_cfg[:tlsWrap] = tls_auth
+auth = {
+  id: "auth",
+  name: "tls-auth",
+  comment: "256-bit --tls-auth",
   ovpn: {
-    cfg: cfg,
-    endpoints: [
-      "UDP:80",
-      "UDP:443",
-      "UDP:4569",
-      "UDP:1194",
-      "TCP:443",
-      "TCP:8443"
-    ]
+    cfg: auth_cfg,
+    endpoints: endpoints
   }
 }
-presets = [recommended]
+
+crypt_cfg = cfg.dup
+crypt_cfg[:tlsWrap] = tls_crypt
+crypt = {
+  id: "crypt",
+  name: "tls-crypt",
+  comment: "256-bit --tls-crypt",
+  ovpn: {
+    cfg: crypt_cfg,
+    endpoints: endpoints
+  }
+}
+
+presets = [auth, crypt]
 
 defaults = {
   :username => "ABCdefGH012_jklMNop34Q_R",
-  :country => "US"
+  :country => "US",
+  :preset => "auth"
 }
 
 ###
