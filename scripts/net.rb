@@ -10,11 +10,11 @@ load "util.rb"
 
 template = File.read("../template/servers.json")
 ca = File.read("../static/ca.crt")
+ca_crypt = File.read("../static/ca-crypt.crt")
 tls_auth = read_tls_wrap("auth", 1, "../static/ta.key", 2)
 tls_crypt = read_tls_wrap("crypt", 1, "../static/ta.key", 2)
 
 cfg = {
-  ca: ca,
   cipher: "AES-256-CBC",
   digest: "SHA512",
   compressionFraming: 1,
@@ -37,6 +37,7 @@ endpoints = [
 ]
 
 auth_cfg = cfg.dup
+auth_cfg[:ca] = ca
 auth_cfg[:tlsWrap] = tls_auth
 auth = {
   id: "auth",
@@ -49,6 +50,7 @@ auth = {
 }
 
 crypt_cfg = cfg.dup
+crypt_cfg[:ca] = ca_crypt
 crypt_cfg[:tlsWrap] = tls_crypt
 crypt = {
   id: "crypt",
