@@ -41,8 +41,8 @@ auth_cfg[:ca] = ca
 auth_cfg[:tlsWrap] = tls_auth
 auth = {
   id: "auth",
-  name: "tls-auth",
-  comment: "256-bit --tls-auth",
+  name: "Default (--tls-auth)",
+  comment: "",
   ovpn: {
     cfg: auth_cfg,
     endpoints: endpoints
@@ -54,15 +54,16 @@ crypt_cfg[:ca] = ca_crypt
 crypt_cfg[:tlsWrap] = tls_crypt
 crypt = {
   id: "crypt",
-  name: "tls-crypt",
-  comment: "256-bit --tls-crypt",
+  name: "Crypt (--tls-crypt)",
+  comment: "",
   ovpn: {
     cfg: crypt_cfg,
     endpoints: endpoints
   }
 }
 
-presets = [auth, crypt]
+#presets = [auth, crypt]
+presets = [auth]
 
 defaults = {
   :username => "ABCdefGH012_jklMNop34Q_R",
