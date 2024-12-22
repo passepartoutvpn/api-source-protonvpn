@@ -18,7 +18,7 @@ cfg = {
   cipher: "AES-256-CBC",
   digest: "SHA512",
   compressionFraming: 1,
-  renegotiatesAfterSeconds: 0,
+  renegotiatesAfter: 0,
   checksEKU: true,
   randomizeEndpoint: true
 }
